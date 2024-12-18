@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Cat Trivia</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="calendar.png" type="image/x-icon" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    />
+    <!-- importing manifest json -->
+    <link rel="manifest" href="/manifest.json" />
+  </head>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkyetgP_HtSgKMSS9OtRHLA01HlMe5yWwaYQ&s");
+      color: #333;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .notification {
+      background-color: #f0f8ff;
+      color: #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #006400;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      padding: 30px;
+    }
+
+    .button {
+      background-color: #006400;
+      color: white;
+      font-size: 1.2rem;
+      padding: 15px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #228b22;
+    }
+
+    .message {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #d1f0d1;
+      border-radius: 8px;
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      display: none;
+    }
+
+    .message-body {
+      font-size: 1.4rem;
+      line-height: 1.6;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    footer a {
+      color: #006400;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .loading {
+      font-size: 1.2rem;
+      color: #006400;
+    }
+  </style>
+
+  <body>
+    <div class="container">
+      <div class="notification">
+        <h1><b>Welcome to Random Cat Trivia!</b></h1>
+        <p>
+          <b>Let's discover some interesting cat facts!</b><br />
+          Click the button below to get a random cat trivia fact.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="content">
+          <button
+            class="button"
+            id="btn"
+            onclick="getCatFact()"
+          >
+            View Random Cat Fact
+          </button>
+        </div>
+      </div>
+
+      <article class="message is-info" id="display">
+        <div class="message-body">
+          <h6 id="catFactText"></h6>
+          <p id="catFact"></p>
+        </div>
+      </article>
+
+      <footer class="footer">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Made with Bulma</strong> by
+            <a href="https://www.facebook.com/felixabrasaldojr">DHEYAN</a>.
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript">
+      // Function to fetch random cat fact from API
+      function getCatFact() {
+        const apiUrl = 'https://catfact.ninja/fact'; // API URL for random cat facts
+
+        // Show loading message while fetching
+        document.getElementById('display').style.display = 'none';
+        document.getElementById('catFactText').innerHTML = 'Loading cat fact...';
+
+        fetch(apiUrl)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const catFact = data.fact;
+
+            // Display the trivia
+            document.getElementById('catFactText').innerHTML = 'Cat Fact:';
+            document.getElementById('catFact').innerHTML = catFact;
+            document.getElementById('display').style.display = 'block';
+          })
+          .catch(error => {
+            console.error('Error fetching cat fact:', error);
+            document.getElementById('catFactText').innerHTML = 'Error fetching cat fact!';
+            document.getElementById('catFact').innerHTML = '';
+          });
+      }
+    </script>
+    <script src="sw.js"> </script>
+  </body>
+</html>
